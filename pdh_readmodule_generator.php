@@ -68,7 +68,18 @@ if ( !class_exists( \"pdh_r_".$strModuleName."\" ) ) {
 		'".$strModuleName."_update',
 	);		
 			
-	public \$presets = array();
+	public \$presets = array(
+";
+		
+	foreach($arrTableInformation as $val) {
+		if ($val['name'] == "PRIMARY") break;
+		
+		$out .= "		'".$strModuleName."_".strtolower($val['name'])."' => array('".strtolower($val['name'])."', array('%".$strIDName."%'), array()),\n";
+	}	
+	
+				
+				
+	$out .="	);
 				
 	public function reset(){
 			\$this->pdc->del('pdh_'.$strModuleName.'_table');
@@ -88,7 +99,7 @@ if ( !class_exists( \"pdh_r_".$strModuleName."\" ) ) {
 				while(\$drow = \$objQuery->fetchAssoc()){
 					//TODO: Check if id Column is available
 					\$this->".$strModuleName."[(int)\$drow['id']] = array(
-						";
+";
 	foreach ($arrTableInformation as $val){
 		if ($val['name'] == "PRIMARY") break;
 		
@@ -98,7 +109,7 @@ if ( !class_exists( \"pdh_r_".$strModuleName."\" ) ) {
 		} elseif($val['type'] == 'double' || $val['type'] == 'float'){
 			$cast = "(float)";
 		}
-		$out .= "						'".$val['name']."'			=> ".$cast."\$drow['".$val['name']."'],\n";
+		$out .= "						'".strtolower($val['name'])."'			=> ".$cast."\$drow['".$val['name']."'],\n";
 	}					
 		
 	
@@ -111,21 +122,28 @@ if ( !class_exists( \"pdh_r_".$strModuleName."\" ) ) {
 
 		}	//end init function
 
-						
-	public function get_id_list(){
-		return array_keys(\$this->".$strModuleName.");
-	}
+		/**
+		 * @return multitype: List of all IDs
+		 */				
+		public function get_id_list(){
+			return array_keys(\$this->".$strModuleName.");
+		}
 				
-	";
+";
 	
 	$strID = "\$".$strIDName;
 	foreach ($arrTableInformation as $val){
 		if ($val['name'] == "PRIMARY") break;
 		
 		
-		$out .="		public function get_".$val['name']."(".$strID."){
+		$out .="		/**
+		 * Returns ".$val['name']." for ".$strID."				
+		 * @param integer ".$strID."
+		 * @return multitype ".$val['name']."
+		 */
+		 public function get_".strtolower($val['name'])."(".$strID."){
 			if (isset(\$this->".$strModuleName."[".$strID."])){
-				return \$this->".$strModuleName."[".$strID."];
+				return \$this->".$strModuleName."[".$strID."]['".strtolower($val['name'])."'];
 			}
 			return false;
 		}\n\n";
@@ -136,7 +154,7 @@ if ( !class_exists( \"pdh_r_".$strModuleName."\" ) ) {
 ?>";
 	
 	file_put_contents("pdh_r_".$strModuleName.".class.php", $out);
-		
+	echo "Build of pdh_r_".$strModuleName.".class.php finished";	
 		
 		
 	}
