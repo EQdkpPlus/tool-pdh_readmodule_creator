@@ -25,9 +25,9 @@ class pdh_readmodule_generator extends gen_class {
 	
 	public function __construct() {
 		//Options
-		$strTablename = "__members"; //Insert Tablename here
-		$strModuleName = "members";
-		$strIDName	= "intMemberID";
+		$strTablename = "__clanwars_categories"; //Insert Tablename here
+		$strModuleName = "clanwars_categories";
+		$strIDName	= "intCategoryID";
 		
 		
 		//Do not change after here - exept you know what you are doing ;)
@@ -126,7 +126,19 @@ if ( !class_exists( \"pdh_r_".$strModuleName."\" ) ) {
 		 * @return multitype: List of all IDs
 		 */				
 		public function get_id_list(){
+			if (\$this->".$strModuleName." === null) return array();
 			return array_keys(\$this->".$strModuleName.");
+		}
+		
+		/**
+		 * Get all data of Element with \$strID
+		 * @return multitype: Array with all data
+		 */				
+		public function get_data(".$strID."){
+			if (isset(\$this->".$strModuleName."[".$strID."])){
+				return \$this->".$strModuleName."[".$strID."];
+			}
+			return false;
 		}
 				
 ";
