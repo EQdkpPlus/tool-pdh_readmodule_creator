@@ -25,9 +25,9 @@ class pdh_readmodule_generator extends gen_class {
 	
 	public function __construct() {
 		//Options
-		$strTablename = "__clanwars_categories"; //Insert Tablename here
-		$strModuleName = "clanwars_categories";
-		$strIDName	= "intCategoryID";
+		$strTablename = "__clanwars_awards"; //Insert Tablename here
+		$strModuleName = "clanwars_awards";
+		$strIDName	= "intAwardID";
 		
 		
 		//Do not change after here - exept you know what you are doing ;)
@@ -74,7 +74,7 @@ if ( !class_exists( \"pdh_r_".$strModuleName."\" ) ) {
 	foreach($arrTableInformation as $val) {
 		if ($val['name'] == "PRIMARY") break;
 		
-		$out .= "		'".$strModuleName."_".strtolower($val['name'])."' => array('".strtolower($val['name'])."', array('%".$strIDName."%'), array()),\n";
+		$out .= "		'".$strModuleName."_".$val['name']."' => array('".$val['name']."', array('%".$strIDName."%'), array()),\n";
 	}	
 	
 				
@@ -109,9 +109,9 @@ if ( !class_exists( \"pdh_r_".$strModuleName."\" ) ) {
 		} elseif($val['type'] == 'double' || $val['type'] == 'float'){
 			$cast = "(float)";
 		}
-		$out .= "						'".strtolower($val['name'])."'			=> ".$cast."\$drow['".$val['name']."'],\n";
+		$out .= "						'".$val['name']."'			=> ".$cast."\$drow['".$val['name']."'],\n";
 	}					
-		
+	$strID = "\$".$strIDName;	
 	
 	$out .=					"
 					);
@@ -143,7 +143,7 @@ if ( !class_exists( \"pdh_r_".$strModuleName."\" ) ) {
 				
 ";
 	
-	$strID = "\$".$strIDName;
+	
 	foreach ($arrTableInformation as $val){
 		if ($val['name'] == "PRIMARY") break;
 		
@@ -153,9 +153,9 @@ if ( !class_exists( \"pdh_r_".$strModuleName."\" ) ) {
 		 * @param integer ".$strID."
 		 * @return multitype ".$val['name']."
 		 */
-		 public function get_".strtolower($val['name'])."(".$strID."){
+		 public function get_".$val['name']."(".$strID."){
 			if (isset(\$this->".$strModuleName."[".$strID."])){
-				return \$this->".$strModuleName."[".$strID."]['".strtolower($val['name'])."'];
+				return \$this->".$strModuleName."[".$strID."]['".$val['name']."'];
 			}
 			return false;
 		}\n\n";
