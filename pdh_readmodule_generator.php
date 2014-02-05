@@ -25,9 +25,9 @@ class pdh_readmodule_generator extends gen_class {
 	
 	public function __construct() {
 		//Options
-		$strTablename = "__clanwars_awards"; //Insert Tablename here
-		$strModuleName = "clanwars_awards";
-		$strIDName	= "intAwardID";
+		$strTablename = "__clanwars_fightus"; //Insert Tablename here
+		$strModuleName = "clanwars_fightus";
+		$strIDName	= "intClanID";
 		
 		
 		//Do not change after here - exept you know what you are doing ;)
@@ -57,7 +57,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( \"pdh_r_".$strModuleName."\" ) ) {
 	class pdh_r_".$strModuleName." extends pdh_r_generic{
 		public static function __shortcuts() {
-		\$shortcuts = array('pdc', 'db', 'user', 'pdh', 'time', 'env', 'config');
+		\$shortcuts = array();
 		return array_merge(parent::\$shortcuts, \$shortcuts);
 	}				
 	
@@ -82,7 +82,7 @@ if ( !class_exists( \"pdh_r_".$strModuleName."\" ) ) {
 	$out .="	);
 				
 	public function reset(){
-			\$this->pdc->del('pdh_'.$strModuleName.'_table');
+			\$this->pdc->del('pdh_".$strModuleName."_table');
 			
 			\$this->".$strModuleName." = NULL;
 	}
